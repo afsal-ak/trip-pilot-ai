@@ -12,7 +12,7 @@ import { UserAuthController } from '../../presentation/controllers/user/UserAuth
 import { upload } from '../middlewares/multer';
 import { UploadUseCase } from '../../application/usecases/uploadUseCase';
 import { UploadController } from '../controllers/user/UploadController';
-
+import { GeminiService } from '../../infrastructure/services/GeminiService';
 
 const userRepository = new UserRepository();
 const userAuthUseCases = new UserAuthUsecases(
@@ -20,7 +20,9 @@ const userAuthUseCases = new UserAuthUsecases(
 );
 const userAuthController = new UserAuthController(userAuthUseCases);
 
-const uploadUseCase = new UploadUseCase();
+const geminiService=new GeminiService()
+
+const uploadUseCase = new UploadUseCase(geminiService);
 const uploadController = new UploadController(uploadUseCase);
 
 
@@ -35,7 +37,7 @@ router.post(AUTH_ROUTES.LOGOUT, userAuthController.userLogout);
 
 router.post(
     '/upload',
-    userAuthMiddleware,
+   // userAuthMiddleware,
     upload.single('file'),
     uploadController.uploadDocument
 );
