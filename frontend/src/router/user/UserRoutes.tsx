@@ -5,6 +5,7 @@ import CommonRoutes from './CommonRoutes';
 import UserLayout from '@/layouts/UserLayout';
 import NotFoundPage from '@/components/NotFoundPage';
 import Home from '@/pages/user/home/Home';
+import ProtectedRoutes from './ProtectedRoutes';
  const UserRoutes = () => {
   return (
     <Routes>
@@ -14,7 +15,7 @@ import Home from '@/pages/user/home/Home';
         {CommonRoutes}
     <Route path="/home" element={<Home />} />
 
-        {/* {ProtectedRoutes} */}
+        {ProtectedRoutes}
       </Route>
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
