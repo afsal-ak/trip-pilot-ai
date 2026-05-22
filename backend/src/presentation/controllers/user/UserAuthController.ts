@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { getUserIdFromRequest } from '../../../shared/utils/getUserIdFromRequest';
 import { HttpStatus } from '../../../constants/HttpStatus/HttpStatus';
-import { IUserAuthUseCases } from '../../../application/useCaseInterfaces/user/IUserAuthUseCases';
+import { IUserAuthUseCases } from '../../../application/useCaseInterfaces/IUserAuthUseCases';
 import {  RegisterUserDTO } from '../../../application/dtos/UserAuthDTO';
 import { UserAuthMessages } from '../../../constants/messages.ts/UserAuthMessages';
 export class UserAuthController {
