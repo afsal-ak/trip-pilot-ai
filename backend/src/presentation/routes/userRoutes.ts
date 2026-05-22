@@ -10,11 +10,12 @@ import { UserRepository } from '../../infrastructure/repositories/UserRepository
 import { userRefreshToken } from '../../presentation/controllers/token/userRefreshToken';
 import { UserAuthController } from '../../presentation/controllers/user/UserAuthController';
 import { upload } from '../middlewares/multer';
-import { UploadUseCase } from '../../application/usecases/uploadUseCase';
-import { UploadController } from '../controllers/user/UploadController';
+import { ItineraryUseCase } from '../../application/usecases/ItineraryUseCase';
+import { ItineraryController } from '../controllers/user/ItineraryController';
 import { GeminiService } from '../../infrastructure/services/GeminiService';
 import { openRouterClient } from '../../config/openRouter';
 import { AiService } from '../../infrastructure/services/aiService';
+import { ItineraryRepository } from '../../infrastructure/repositories/ItineraryRepository';
 
 const userRepository = new UserRepository();
 const userAuthUseCases = new UserAuthUsecases(
@@ -22,12 +23,13 @@ const userAuthUseCases = new UserAuthUsecases(
 );
 const userAuthController = new UserAuthController(userAuthUseCases);
 
-const geminiService=new GeminiService()
+const geminiService = new GeminiService()
 
- const aiService =new AiService( openRouterClient );
+const aiService = new AiService(openRouterClient);
 
-const uploadUseCase = new UploadUseCase(aiService,geminiService);
-const uploadController = new UploadController(uploadUseCase);
+const itineraryRepository = new ItineraryRepository()
+const itineraryUseCase = new ItineraryUseCase(aiService, itineraryRepository, geminiService);
+const itineraryController = new ItineraryController(itineraryUseCase);
 
 
 const router = Router();
@@ -41,8 +43,21 @@ router.post(AUTH_ROUTES.LOGOUT, userAuthController.userLogout);
 
 router.post(
     '/upload',
-   // userAuthMiddleware,
+    userAuthMiddleware,
     upload.single('file'),
-    uploadController.uploadDocument
+    itineraryController.uploadDocument
+);
+
+router.get(
+    "/itineraries",
+    userAuthMiddleware,
+    itineraryController.getUserItineraries
+);
+
+router.get(
+    "/itineraries/:id",
+    userAuthMiddleware,
+    itineraryController.getSingleItinerary
+
 );
 export default router;
