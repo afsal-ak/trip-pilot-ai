@@ -13,6 +13,8 @@ import { upload } from '../middlewares/multer';
 import { UploadUseCase } from '../../application/usecases/uploadUseCase';
 import { UploadController } from '../controllers/user/UploadController';
 import { GeminiService } from '../../infrastructure/services/GeminiService';
+import { openRouterClient } from '../../config/openRouter';
+import { AiService } from '../../infrastructure/services/aiService';
 
 const userRepository = new UserRepository();
 const userAuthUseCases = new UserAuthUsecases(
@@ -22,7 +24,9 @@ const userAuthController = new UserAuthController(userAuthUseCases);
 
 const geminiService=new GeminiService()
 
-const uploadUseCase = new UploadUseCase(geminiService);
+ const aiService =new AiService( openRouterClient );
+
+const uploadUseCase = new UploadUseCase(aiService,geminiService);
 const uploadController = new UploadController(uploadUseCase);
 
 
