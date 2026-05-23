@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { handleRegister } from '@/services/auth/authService';
 import { toast } from 'sonner';
 
- 
 const Signup = () => {
   const navigate = useNavigate();
 
@@ -14,108 +13,176 @@ const Signup = () => {
     confirmPassword: '',
   });
 
-  const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState<any>({});
+  const [loading, setLoading] =
+    useState(false);
+
+  const [errors, setErrors] =
+    useState<any>({});
 
   // ----------------------------
   // Update field & clear error
   // ----------------------------
-  const updateField = (field: string, value: any) => {
-    setForm((prev) => ({ ...prev, [field]: value }));
+  const updateField = (
+    field: string,
+    value: any
+  ) => {
+    setForm((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
 
-    // clear error automatically
-    setErrors((prev: any) => ({ ...prev, [field]: '' }));
+    setErrors((prev: any) => ({
+      ...prev,
+      [field]: '',
+    }));
   };
 
   const validate = () => {
     const newErrors: any = {};
 
-    if (!form.fullName.trim()) newErrors.fullName = 'Full Name  is required';
- 
- 
-    if (!form.email.includes('@')) newErrors.email = 'Invalid email';
+    if (!form.fullName.trim())
+      newErrors.fullName =
+        'Full Name is required';
 
- 
-    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,}$/;
+    if (!form.email.includes('@'))
+      newErrors.email =
+        'Invalid email';
 
-    if (!passwordRegex.test(form.password))
-      newErrors.password = 'Minimum 6 chars with one letter, one number, and one special char';
+    const passwordRegex =
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,}$/;
 
-    if (form.password !== form.confirmPassword)
-      newErrors.confirmPassword = 'Passwords do not match';
+    if (
+      !passwordRegex.test(
+        form.password
+      )
+    )
+      newErrors.password =
+        'Minimum 6 chars with one letter, one number, and one special char';
 
-    // ----------- Preference validation -----------
- 
+    if (
+      form.password !==
+      form.confirmPassword
+    )
+      newErrors.confirmPassword =
+        'Passwords do not match';
+
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+
+    return (
+      Object.keys(newErrors)
+        .length === 0
+    );
   };
 
-  
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (
+    e: React.FormEvent
+  ) => {
     e.preventDefault();
+
     if (!validate()) return;
 
     setLoading(true);
+
     try {
       await handleRegister(form);
-      toast.success('Registration Successful');
+
+      toast.success(
+        'Registration Successful'
+      );
+
       navigate('/login');
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Signup failed');
+      toast.error(
+        error.response?.data
+          ?.message ||
+          'Signup failed'
+      );
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="flex w-full max-w-5xl shadow-lg rounded-lg overflow-hidden bg-white">
-        <div className="hidden md:flex md:w-1/2 bg-orange items-center justify-center p-8 text-white">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold mb-4">Join Trip Pilot Ai</h2>
-            <p>Discover content, follow interests, and personalize your feed.</p>
+    <div className="min-h-screen bg-background font-poppins flex items-center justify-center px-4 py-8">
+      <div className="w-full max-w-5xl bg-card border border-border rounded-3xl overflow-hidden shadow-2xl grid md:grid-cols-2">
+        
+        {/* Left Side */}
+        <div className="hidden md:flex relative items-center justify-center bg-gradient-to-br from-primary to-secondary p-12">
+          <div className="text-center text-white z-10">
+            <h2 className="text-4xl font-bold mb-5 leading-tight">
+              Join Trip Pilot AI
+            </h2>
+
+            <p className="text-white/90 leading-relaxed text-base max-w-md mx-auto">
+              Discover amazing
+              destinations, create
+              smart itineraries, and
+              plan unforgettable
+              journeys with AI.
+            </p>
           </div>
+
+          {/* Decorative Blur */}
+          <div className="absolute top-10 left-10 w-40 h-40 bg-white/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-10 right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl" />
         </div>
 
-        <div className="w-full md:w-1/2 p-8">
-          <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto">
-            <h2 className="text-2xl font-bold text-orange mb-6 text-center">Create an Account</h2>
+        {/* Right Side */}
+        <div className="flex items-center justify-center p-8 md:p-12 bg-card">
+          <form
+            onSubmit={handleSubmit}
+            className="w-full max-w-md"
+          >
+            <div className="mb-8 text-center">
+              <h2 className="text-3xl font-bold text-foreground">
+                Create Account
+              </h2>
 
-            {/* FIRST NAME */}
+              <p className="text-muted-foreground mt-2">
+                Start your journey
+                with Trip Pilot AI
+              </p>
+            </div>
+
+            {/* FULL NAME */}
             <InputField
               label="Full Name"
               field="fullName"
               value={form.fullName}
-              error={errors.fullName}
-              onChange={updateField}
+              error={
+                errors.fullName
+              }
+              onChange={
+                updateField
+              }
             />
-
-            
-
-             
 
             {/* EMAIL */}
             <InputField
               label="Email"
               field="email"
-              name="email"
               type="email"
               value={form.email}
               error={errors.email}
-              onChange={updateField}
+              onChange={
+                updateField
+              }
             />
-
-             
 
             {/* PASSWORD */}
             <InputField
               label="Password"
               field="password"
               type="password"
-              value={form.password}
-              error={errors.password}
-              onChange={updateField}
+              value={
+                form.password
+              }
+              error={
+                errors.password
+              }
+              onChange={
+                updateField
+              }
             />
 
             {/* CONFIRM PASSWORD */}
@@ -123,28 +190,40 @@ const Signup = () => {
               label="Confirm Password"
               field="confirmPassword"
               type="password"
-              value={form.confirmPassword}
-              error={errors.confirmPassword}
-              onChange={updateField}
+              value={
+                form.confirmPassword
+              }
+              error={
+                errors.confirmPassword
+              }
+              onChange={
+                updateField
+              }
             />
-
-            
 
             {/* SUBMIT */}
             <button
               type="submit"
-              className="w-full bg-orange text-white py-2 rounded hover:bg-orange-dark transition flex justify-center items-center gap-2 disabled:opacity-60"
               disabled={loading}
+              className="w-full rounded-lg bg-primary hover:bg-secondary text-white font-medium py-3 transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed shadow-md hover:shadow-lg flex items-center justify-center gap-2"
             >
               {loading && (
-                <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
               )}
-              {loading ? 'Processing...' : 'Sign Up'}
+
+              {loading
+                ? 'Processing...'
+                : 'Sign Up'}
             </button>
 
-            <p className="mt-4 text-sm text-center">
-              Already have an account?{' '}
-              <Link to="/login" className="text-orange underline">
+            {/* LOGIN */}
+            <p className="mt-6 text-center text-sm text-muted-foreground">
+              Already have an
+              account?{' '}
+              <Link
+                to="/login"
+                className="text-primary font-medium hover:underline"
+              >
                 Login
               </Link>
             </p>
@@ -158,16 +237,36 @@ const Signup = () => {
 // ----------------------------
 // Reusable Input Component
 // ----------------------------
-const InputField = ({ label, field, value, onChange, error, type = 'text' }: any) => (
-  <div className="mb-4">
-    <label className="block text-sm font-medium mb-1">{label}</label>
+const InputField = ({
+  label,
+  field,
+  value,
+  onChange,
+  error,
+  type = 'text',
+}: any) => (
+  <div className="mb-5">
+    <label className="block text-sm font-medium text-foreground mb-2">
+      {label}
+    </label>
+
     <input
       type={type}
-      className="w-full border px-4 py-2 rounded"
       value={value}
-      onChange={(e) => onChange(field, e.target.value)}
+      onChange={(e) =>
+        onChange(
+          field,
+          e.target.value
+        )
+      }
+      className="w-full rounded-lg border border-border bg-background px-4 py-3 text-foreground outline-none transition-all duration-200 focus:border-primary focus:ring-4 focus:ring-primary/20"
     />
-    {error && <p className="text-red-500 text-sm">{error}</p>}
+
+    {error && (
+      <p className="text-danger text-sm mt-1">
+        {error}
+      </p>
+    )}
   </div>
 );
 
