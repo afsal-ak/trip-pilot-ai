@@ -81,7 +81,7 @@ const Navbar = () => {
               </Link>
 
               <Link
-                to="/history"
+                to="/itineraries"
                 className="font-medium text-slate-700 transition hover:text-primary"
               >
                 My Trips
