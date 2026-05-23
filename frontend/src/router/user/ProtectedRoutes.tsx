@@ -5,6 +5,7 @@ import Home from '@/pages/user/home/Home';
 import UploadPage from '@/pages/user/Itinerary/GenerateItineraryPage';
 import SingleItineraryPage from '@/pages/user/Itinerary/SingleItineraryPage';
 import ItineraryPage from '@/pages/user/Itinerary/ItineraryPage';
+
 const ProtectedRoutes = (
   <Route element={<UserProtectedRoutes />}>
     <Route path="/home" element={<Home />} />
@@ -13,7 +14,6 @@ const ProtectedRoutes = (
    <Route path="/itineraries"element={ <ItineraryPage />  } /> 
 
    <Route path="/itinerary/:id"element={ <SingleItineraryPage/>  } />
-
-  </Route>
+   </Route>
 );
 export default ProtectedRoutes;

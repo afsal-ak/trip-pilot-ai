@@ -18,29 +18,14 @@ import ItineraryCardSkeleton from '@/components/itinerary/ItineraryCardSkeleton'
 
 const ItineraryPage =
   () => {
-    const [
-      itineraries,
-      setItineraries,
-    ] = useState<
-      Itinerary[]
-    >([]);
+    const [ itineraries,setItineraries ] = useState<Itinerary[] >([]);
 
-    const [
-      loading,
-      setLoading,
-    ] =
-      useState(true);
+    const [loading,setLoading, ] =useState(true);
 
-    const [page, setPage] =
-      useState(1);
+    const [page, setPage] = useState(1);
 
-    const [
-      pagination,
-      setPagination,
-    ] =
-      useState({
-        totalPages: 1,
-      });
+    const [ pagination,setPagination] =
+      useState({totalPages: 1 });
 
     useEffect(() => {
       fetchItineraries();
