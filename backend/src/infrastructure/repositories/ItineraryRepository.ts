@@ -61,28 +61,28 @@ export class ItineraryRepository implements IItineraryRepository {
 
         return itinerary;
     }
-   
-async togglePublicStatus(
-  itineraryId: string,
-  userId: string
-): Promise<IItinerary | null> {
-  const itinerary =
-    await ItineraryModel.findOne({
-      _id:
-        itineraryId,
-      userId,
-    });
 
-  if (!itinerary)
-    return null;
+    async togglePublicStatus(
+        itineraryId: string,
+        userId: string
+    ): Promise<IItinerary | null> {
+        const itinerary =
+            await ItineraryModel.findOne({
+                _id:
+                    itineraryId,
+                userId,
+            });
 
-  itinerary.isPublic =
-    !itinerary.isPublic;
+        if (!itinerary)
+            return null;
 
-  await itinerary.save();
+        itinerary.isPublic =
+            !itinerary.isPublic;
 
-  return itinerary.toObject();
-}
+        await itinerary.save();
+
+        return itinerary.toObject();
+    }
     async findByShareId(
         shareId: string
     ): Promise<IItinerary | null> {
