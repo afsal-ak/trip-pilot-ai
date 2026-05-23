@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button } from '../ui/Button';
-import { Link } from 'react-router-dom';
+ import { Link } from 'react-router-dom';
 import {
   Menu,
   User,
@@ -14,6 +13,7 @@ import type {
   RootState,
 } from '@/redux/store';
 import { toast } from 'sonner';
+import { Button } from '../Button';
 
 const Navbar = () => {
   const dispatch =
