@@ -28,4 +28,13 @@ export interface IItineraryRepository {
   findById(
     itineraryId: string
   ): Promise<IItinerary | null>;
+
+ togglePublicStatus(
+  itineraryId: string,
+  userId: string
+): Promise<IItinerary | null> 
+
+  findByShareId(
+  shareId: string
+): Promise<IItinerary | null>;
 }

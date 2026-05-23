@@ -60,4 +60,17 @@ router.get(
     itineraryController.getSingleItinerary
 
 );
+
+router.patch(
+  '/itineraries/:id/public',
+  userAuthMiddleware,
+  itineraryController
+    .togglePublicStatus
+);
+
+router.get(
+  '/public/itinerary/:shareId',
+  itineraryController
+    .getSharedItinerary
+);
 export default router;

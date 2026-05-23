@@ -1,6 +1,6 @@
 import { IItinerary } from "../../domain/entities/IItinerary";
-import { ItineraryDetailDto, ItineraryListDto } from "../dtos/itineraryDTO";
-import { PaginationDto } from "../dtos/PaginatedItineraryDTO";
+import { ItineraryDetailDto, ItineraryListDto } from "../dtos/ItineraryDTO";
+ import { PaginationDto } from "../dtos/PaginatedItineraryDTO";
 
 export interface IItineraryUseCase {
   GenerateItinerary(
@@ -21,4 +21,15 @@ export interface IItineraryUseCase {
   ): Promise<
     ItineraryDetailDto
   >;
+
+  togglePublicStatus(
+  itineraryId: string,
+  userId: string
+): Promise<{
+  isPublic: boolean;
+}>;
+
+getSharedItinerary(
+  shareId: string
+): Promise<ItineraryDetailDto>;
 }

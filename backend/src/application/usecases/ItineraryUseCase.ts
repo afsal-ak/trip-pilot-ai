@@ -43,7 +43,7 @@ import { IItineraryRepository } from '../../domain/repositories/IItineraryReposi
 import { IItinerary } from '../../domain/entities/IItinerary';
 import { IItineraryUseCase } from '../useCaseInterfaces/IItineraryUseCase';
 import { ItineraryMapper } from '../mapper/ItineraryMapper';
-import { ItineraryDetailDto, ItineraryListDto } from '../dtos/itineraryDTO';
+import { ItineraryDetailDto, ItineraryListDto } from '../dtos/ItineraryDTO';
 import { PaginationDto } from '../dtos/PaginatedItineraryDTO';
 
 export class ItineraryUseCase implements IItineraryUseCase {
@@ -263,4 +263,53 @@ export class ItineraryUseCase implements IItineraryUseCase {
             itinerary
         );
     }
+
+    async togglePublicStatus(
+        itineraryId: string,
+        userId: string
+    ): Promise<{
+        isPublic: boolean;
+    }> {
+        const itinerary =
+            await this
+                ._itineraryRepository
+                .togglePublicStatus(
+                    itineraryId,
+                    userId
+                );
+
+        if (!itinerary) {
+            throw new AppError(
+                HttpStatus.NOT_FOUND,
+                'Itinerary not found'
+            );
+        }
+
+        return {
+            isPublic:
+                itinerary.isPublic,
+        };
+    }
+
+    async getSharedItinerary(
+  shareId: string
+): Promise<ItineraryDetailDto> {
+  const itinerary =
+    await this
+      ._itineraryRepository
+      .findByShareId(
+        shareId
+      );
+
+  if (!itinerary) {
+    throw new AppError(
+      HttpStatus.NOT_FOUND,
+      'Shared itinerary not found'
+    );
+  }
+
+  return ItineraryMapper.toDetailDto(
+    itinerary
+  );
+}
 }

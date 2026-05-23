@@ -1,5 +1,5 @@
 import { IItinerary } from "../../domain/entities/IItinerary";
-import { ItineraryDetailDto, ItineraryListDto } from "../dtos/itineraryDTO";
+import { ItineraryDetailDto, ItineraryListDto } from "../dtos/ItineraryDTO";
 
  
 export class ItineraryMapper {

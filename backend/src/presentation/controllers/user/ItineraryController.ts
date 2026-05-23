@@ -34,7 +34,7 @@ export class ItineraryController {
         }
     };
 
-    getUserItineraries=async(req: Request, res: Response, next: NextFunction): Promise<void>=> {
+    getUserItineraries = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const userId = getUserIdFromRequest(req)
 
@@ -59,7 +59,7 @@ export class ItineraryController {
 
     }
 
-      getSingleItinerary=async(req: Request, res: Response, next: NextFunction): Promise<void>=> {
+    getSingleItinerary = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
 
         } catch (error) {
@@ -75,4 +75,76 @@ export class ItineraryController {
             data: itinerary,
         });
     }
+
+    togglePublicStatus =
+        async (
+            req: Request,
+            res: Response,
+            next: NextFunction
+        ): Promise<void> => {
+            try {
+                const userId =
+                    getUserIdFromRequest(
+                        req
+                    );
+
+                const itineraryId =
+                    req.params.id;
+
+                const result =
+                    await this
+                        ._itineraryUseCase
+                        .togglePublicStatus(
+                            itineraryId,
+                            userId
+                        );
+
+                res.status(
+                    HttpStatus.OK
+                ).json({
+                    success: true,
+                    message:
+                        result.isPublic
+                            ? 'Itinerary is now public'
+                            : 'Itinerary is now private',
+
+                    data:
+                        result,
+                });
+            } catch (error) {
+                next(error);
+            }
+        };
+
+    getSharedItinerary =
+        async (
+            req: Request,
+            res: Response,
+            next: NextFunction
+        ): Promise<void> => {
+            try {
+                const shareId =
+                    req.params.shareId;
+
+                const itinerary =
+                    await this
+                        ._itineraryUseCase
+                        .getSharedItinerary(
+                            shareId
+                        );
+
+                res.status(
+                    HttpStatus.OK
+                ).json({
+                    success: true,
+                    message:
+                        'Shared itinerary fetched successfully',
+
+                    data:
+                        itinerary,
+                });
+            } catch (error) {
+                next(error);
+            }
+        };
 }
