@@ -1,6 +1,7 @@
 import {
   useEffect,
   useState,
+  useRef
 } from 'react';
 
 import {
@@ -27,8 +28,9 @@ const SingleItineraryPage =
     const navigate = useNavigate();
 
     const [itinerary, setItinerary] = useState<Itinerary | null>(null);
-
     const [loading, setLoading] = useState(true);
+
+    const pdfRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
       if (id) {
@@ -40,12 +42,12 @@ const SingleItineraryPage =
       async () => {
         try {
           setLoading(true);
-          const data = await getSingleItinerary(id! );
-          setItinerary(data );
+          const data = await getSingleItinerary(id!);
+          setItinerary(data);
         } catch (error) {
-          console.log( error  );
+          console.log(error);
         } finally {
-          setLoading(false );
+          setLoading(false);
         }
       };
 

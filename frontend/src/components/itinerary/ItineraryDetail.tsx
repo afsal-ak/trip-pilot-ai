@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import {
     ArrowLeft,
     Calendar,
@@ -12,6 +12,9 @@ import {
     Lock,
     Share2,
 } from 'lucide-react';
+
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
@@ -97,6 +100,9 @@ const ItineraryDetail = ({
         useState(
             initialItinerary
         );
+    const pdfRef = useRef<HTMLDivElement | null>(null);
+    const [downloadingPdf, setDownloadingPdf] = useState(false);
+
 
     const handleTogglePublic =
         async () => {
@@ -212,6 +218,103 @@ const ItineraryDetail = ({
             }
         };
 
+    const handleDownloadPDF = async () => {
+        try {
+            setDownloadingPdf(true);
+
+            const element =
+                document.body;
+
+            const canvas =
+                await html2canvas(
+                    element,
+                    {
+                        scale: 2,
+                        useCORS: true,
+                    }
+                );
+
+            const imgData =
+                canvas.toDataURL(
+                    'image/png'
+                );
+
+            const pdf =
+                new jsPDF(
+                    'p',
+                    'mm',
+                    'a4'
+                );
+
+            const imgWidth =
+                210;
+
+            const pageHeight =
+                295;
+
+            const imgHeight =
+                (canvas.height *
+                    imgWidth) /
+                canvas.width;
+
+            let heightLeft =
+                imgHeight;
+
+            let position = 0;
+
+            pdf.addImage(
+                imgData,
+                'PNG',
+                0,
+                position,
+                imgWidth,
+                imgHeight
+            );
+
+            heightLeft -=
+                pageHeight;
+
+            while (
+                heightLeft > 0
+            ) {
+                position =
+                    heightLeft -
+                    imgHeight;
+
+                pdf.addPage();
+
+                pdf.addImage(
+                    imgData,
+                    'PNG',
+                    0,
+                    position,
+                    imgWidth,
+                    imgHeight
+                );
+
+                heightLeft -=
+                    pageHeight;
+            }
+
+            pdf.save(
+                `${itinerary?.title ??
+                'trip-itinerary'
+                }.pdf`
+            );
+        } catch (error) {
+            console.log(
+                error
+            );
+
+            toast.error(
+                'Failed to generate PDF'
+            );
+        } finally {
+            setDownloadingPdf(
+                false
+            );
+        }
+    };
     return (
         <div className="min-h-screen bg-background font-poppins">
             <div className="max-w-7xl mx-auto px-4 py-8">
@@ -244,8 +347,8 @@ const ItineraryDetail = ({
 
                                 <span
                                     className={`px-4 py-2 rounded-full text-sm font-medium ${itinerary.isPublic
-                                            ? 'bg-green-500/20 border border-green-300'
-                                            : 'bg-white/10 border border-white/20'
+                                        ? 'bg-green-500/20 border border-green-300'
+                                        : 'bg-white/10 border border-white/20'
                                         }`}
                                 >
                                     <div className="flex items-center gap-2">
@@ -310,16 +413,15 @@ const ItineraryDetail = ({
                                                 handleTogglePublic
                                             }
                                             className={`w-full py-3 rounded-xl font-semibold transition ${itinerary.isPublic
-                                                    ? 'bg-green-500 text-white'
-                                                    : 'bg-white text-primary'
+                                                ? 'bg-green-500 text-white'
+                                                : 'bg-white text-primary'
                                                 }`}
                                         >
                                             {itinerary.isPublic
                                                 ? 'Make Private'
                                                 : 'Make Public'}
                                         </button>
-
-                                        <div className="grid grid-cols-2 gap-3">
+                                        <div className="grid grid-cols-3 gap-3">
 
                                             <button
                                                 onClick={
@@ -328,11 +430,9 @@ const ItineraryDetail = ({
                                                 disabled={
                                                     !itinerary.isPublic
                                                 }
-                                                className="py-3 rounded-xl bg-white text-primary font-medium disabled:opacity-40 flex items-center justify-center gap-2"
+                                                className="h-12 rounded-xl bg-slate-100 text-slate-800 font-medium flex items-center justify-center gap-2 hover:bg-slate-200 transition"
                                             >
-                                                <Copy
-                                                    size={18}
-                                                />
+                                                <Copy size={18} />
                                                 Copy Link
                                             </button>
 
@@ -343,15 +443,28 @@ const ItineraryDetail = ({
                                                 disabled={
                                                     !itinerary.isPublic
                                                 }
-                                                className="py-3 rounded-xl bg-white/10 border border-white/20 text-white font-medium disabled:opacity-40 flex items-center justify-center gap-2"
+                                                className="h-12 rounded-xl bg-slate-100 text-slate-800 font-medium flex items-center justify-center gap-2 hover:bg-slate-200 transition"
                                             >
-                                                <Share2
-                                                    size={18}
-                                                />
+                                                <Share2 size={18} />
                                                 Share
                                             </button>
 
+                                            <button
+                                                onClick={
+                                                    handleDownloadPDF
+                                                }
+                                                disabled={
+                                                    downloadingPdf
+                                                }
+                                                className="h-12 rounded-xl bg-slate-100 text-slate-800 font-medium flex items-center justify-center gap-2 hover:bg-slate-200 transition disabled:opacity-50"
+                                            >
+                                                {downloadingPdf
+                                                    ? 'Generating...'
+                                                    : '📄 PDF'}
+                                            </button>
+
                                         </div>
+
                                     </div>
 
                                 </div>
@@ -712,7 +825,7 @@ const ItineraryDetail = ({
                 ) : null}
             </div>
         </div>
-   );
+    );
 };
 
 export default ItineraryDetail;
