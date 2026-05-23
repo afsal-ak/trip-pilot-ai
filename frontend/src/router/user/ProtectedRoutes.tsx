@@ -2,9 +2,9 @@ import { Route } from 'react-router-dom';
 import UserProtectedRoutes from './UserProtectedRoute';
 import Home from '@/pages/user/home/Home';
 
-import UploadPage from '@/pages/user/home/UploadPage';
-import SingleItineraryPage from '@/pages/user/iteItinerary/SingleItineraryPage';
-import ItineraryPage from '@/pages/user/iteItinerary/ItineraryPage';
+import UploadPage from '@/pages/user/Itinerary/GenerateItineraryPage';
+import SingleItineraryPage from '@/pages/user/Itinerary/SingleItineraryPage';
+import ItineraryPage from '@/pages/user/Itinerary/ItineraryPage';
 const ProtectedRoutes = (
   <Route element={<UserProtectedRoutes />}>
     <Route path="/home" element={<Home />} />
