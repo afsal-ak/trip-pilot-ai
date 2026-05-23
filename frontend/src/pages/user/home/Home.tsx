@@ -6,6 +6,7 @@ import {
   History,
   Map,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   return (
@@ -35,13 +36,35 @@ const Home = () => {
               in seconds.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-sky-600 hover:bg-sky-700 text-white px-8 py-4 rounded-xl font-semibold transition">
-                Get Started
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              {/* Generate Trip */}
+              <button className="group relative overflow-hidden rounded-2xl bg-sky-600 px-8 py-4 font-semibold text-white shadow-lg shadow-sky-200 transition-all duration-300 hover:-translate-y-1 hover:bg-sky-700 hover:shadow-xl hover:shadow-sky-300">
+                <span className="relative z-10 flex items-center gap-2">
+                  <Plane
+                    size={18}
+                    className="transition-transform duration-300 group-hover:rotate-12"
+                  />
+
+                  <Link to="/generate">
+                    <button>Generate Trip</button>
+                  </Link>
+                </span>
+
+                <div className="absolute inset-0 bg-gradient-to-r from-sky-500 to-cyan-500 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
               </button>
 
-              <button className="border border-slate-300 hover:bg-slate-100 px-8 py-4 rounded-xl font-semibold transition">
-                Explore Features
+              {/* My Trips */}
+              <button className="group rounded-2xl border border-slate-300 bg-white px-8 py-4 font-semibold text-slate-700 transition-all duration-300 hover:-translate-y-1 hover:border-sky-300 hover:bg-sky-50 hover:text-sky-700 hover:shadow-lg">
+                <span className="flex items-center gap-2">
+                  <History
+                    size={18}
+                    className="transition-transform duration-300 group-hover:scale-110"
+                  />
+
+                  <Link to="/itineraries">
+                    <button>My Trips</button>
+                  </Link>
+                </span>
               </button>
             </div>
           </div>

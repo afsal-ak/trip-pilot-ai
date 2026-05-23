@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button } from '../ui/button';
+import { Button } from '../ui/Button';
 import { Link } from 'react-router-dom';
 import {
   Menu,
@@ -74,10 +74,10 @@ const Navbar = () => {
           {isAuthenticated && (
             <>
               <Link
-                to="/upload"
+                to="/generate"
                 className="font-medium text-slate-700 transition hover:text-primary"
               >
-                Upload
+                 Generate Trip
               </Link>
 
               <Link
