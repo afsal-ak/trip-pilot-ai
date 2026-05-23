@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import {
     ArrowLeft,
     Calendar,
@@ -100,7 +100,6 @@ const ItineraryDetail = ({
         useState(
             initialItinerary
         );
-    const pdfRef = useRef<HTMLDivElement | null>(null);
     const [downloadingPdf, setDownloadingPdf] = useState(false);
 
 

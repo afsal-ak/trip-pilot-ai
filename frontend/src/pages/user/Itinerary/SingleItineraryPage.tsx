@@ -1,7 +1,6 @@
 import {
   useEffect,
   useState,
-  useRef
 } from 'react';
 
 import {
@@ -30,8 +29,7 @@ const SingleItineraryPage =
     const [itinerary, setItinerary] = useState<Itinerary | null>(null);
     const [loading, setLoading] = useState(true);
 
-    const pdfRef = useRef<HTMLDivElement | null>(null);
-
+ 
     useEffect(() => {
       if (id) {
         fetchItinerary();
