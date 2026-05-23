@@ -3,6 +3,7 @@ import { Router } from 'express';
 import { userAuthMiddleware } from '../middlewares/userAuthMiddleware';
 import {
     AUTH_ROUTES,
+    ITINERARY_ROUTES,
 } from '../../constants/route-constants/userRoutes';
 
 import { UserAuthUsecases } from '../../application/usecases/userAuthUseCases';
@@ -13,8 +14,6 @@ import { upload } from '../middlewares/multer';
 import { ItineraryUseCase } from '../../application/usecases/ItineraryUseCase';
 import { ItineraryController } from '../controllers/user/ItineraryController';
 import { GeminiService } from '../../infrastructure/services/GeminiService';
-import { openRouterClient } from '../../config/openRouter';
-import { AiService } from '../../infrastructure/services/aiService';
 import { ItineraryRepository } from '../../infrastructure/repositories/ItineraryRepository';
 
 const userRepository = new UserRepository();
@@ -25,10 +24,9 @@ const userAuthController = new UserAuthController(userAuthUseCases);
 
 const geminiService = new GeminiService()
 
-const aiService = new AiService(openRouterClient);
 
 const itineraryRepository = new ItineraryRepository()
-const itineraryUseCase = new ItineraryUseCase(aiService, itineraryRepository, geminiService);
+const itineraryUseCase = new ItineraryUseCase(itineraryRepository, geminiService);
 const itineraryController = new ItineraryController(itineraryUseCase);
 
 
@@ -41,36 +39,38 @@ router.post(AUTH_ROUTES.LOGIN, userAuthController.login);
 router.post(AUTH_ROUTES.LOGOUT, userAuthController.userLogout);
 
 
+// ITINERARY ROUTES
+
 router.post(
-    '/upload',
+    ITINERARY_ROUTES.GENERATE,
     userAuthMiddleware,
     upload.single('file'),
-    itineraryController.uploadDocument
+    itineraryController.generateItineraries
 );
 
 router.get(
-    "/itineraries",
+    ITINERARY_ROUTES.GET_USER_ITINERARIES,
     userAuthMiddleware,
     itineraryController.getUserItineraries
 );
 
 router.get(
-    "/itineraries/:id",
+    ITINERARY_ROUTES.GET_SINGLE_ITINERARY,
     userAuthMiddleware,
     itineraryController.getSingleItinerary
 
 );
 
 router.patch(
-  '/itineraries/:id/public',
-  userAuthMiddleware,
-  itineraryController
-    .togglePublicStatus
+    ITINERARY_ROUTES.TOGGLE_PUBLIC_STATUS,
+    userAuthMiddleware,
+    itineraryController
+        .togglePublicStatus
 );
 
 router.get(
-  '/public/itinerary/:shareId',
-  itineraryController
-    .getSharedItinerary
+    ITINERARY_ROUTES.GET_SHARED_ITINERARY,
+    itineraryController
+        .getSharedItinerary
 );
 export default router;

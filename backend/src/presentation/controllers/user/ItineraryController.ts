@@ -7,7 +7,7 @@ import { getUserIdFromRequest } from '../../../shared/utils/getUserIdFromRequest
 export class ItineraryController {
     constructor(private _itineraryUseCase: IItineraryUseCase) { }
 
-    uploadDocument = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    generateItineraries = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const userId = getUserIdFromRequest(req)
             const file = req.file;

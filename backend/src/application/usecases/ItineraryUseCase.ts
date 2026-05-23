@@ -1,36 +1,3 @@
-// import pdfParse from 'pdf-parse';
-// import Tesseract from 'tesseract.js';
-
-// import { IUploadUseCase } from '../useCaseInterfaces/IUploadUseCase';
-// import { AppError } from '../../shared/utils/AppError';
-// import { HttpStatus } from '../../constants/HttpStatus/HttpStatus';
-// import { IGeminiService } from '../../infrastructure/services/IGeminiService';
-
-// export class UploadUseCase implements IUploadUseCase {
-//     constructor(private _geminiService: IGeminiService ) { }
-
-//     async uploadAndExtract(file: Express.Multer.File): Promise<string> {
-//         if (!file) {
-//             throw new AppError(HttpStatus.NO_CONTENT, 'No file uploaded');
-//         }
-
-//         // PDF extraction
-//         if (file.mimetype === 'application/pdf') {
-//             const pdfData = await pdfParse(file.buffer);
-//             return pdfData.text;
-//         }
-
-//         // Image OCR
-//         if (file.mimetype.startsWith('image/')) {
-//             const { data: { text } } = await Tesseract.recognize(file.buffer, 'eng');
-//             return text;
-//         }
-
-//         throw new AppError(HttpStatus.BAD_REQUEST, 'Unsupported file type');
-//     }
-// }
-
-
 
 import pdfParse from 'pdf-parse';
 import Tesseract from 'tesseract.js';
@@ -38,7 +5,6 @@ import Tesseract from 'tesseract.js';
 import { AppError } from '../../shared/utils/AppError';
 import { HttpStatus } from '../../constants/HttpStatus/HttpStatus';
 import { IGeminiService } from '../../infrastructure/services/IGeminiService';
-import { IAiService } from '../../infrastructure/services/IAiService';
 import { IItineraryRepository } from '../../domain/repositories/IItineraryRepository';
 import { IItinerary } from '../../domain/entities/IItinerary';
 import { IItineraryUseCase } from '../useCaseInterfaces/IItineraryUseCase';
@@ -48,7 +14,6 @@ import { PaginationDto } from '../dtos/PaginatedItineraryDTO';
 
 export class ItineraryUseCase implements IItineraryUseCase {
     constructor(
-        private readonly _aiService: IAiService,
         private readonly _itineraryRepository: IItineraryRepository,
         private _geminiService: IGeminiService
 
@@ -101,12 +66,8 @@ export class ItineraryUseCase implements IItineraryUseCase {
                 .trim();
 
         let parsed;
-
         try {
-            parsed =
-                JSON.parse(
-                    cleaned
-                );
+            parsed = JSON.parse(cleaned);
         } catch (error) {
             console.error(
                 "Invalid AI JSON:",
@@ -209,9 +170,9 @@ export class ItineraryUseCase implements IItineraryUseCase {
             );
 
         return savedItinerary;
-        // return itinerary!;
-    }
 
+    }
+    
     async getUserItineraries(
         userId: string,
         page: number,
@@ -292,24 +253,24 @@ export class ItineraryUseCase implements IItineraryUseCase {
     }
 
     async getSharedItinerary(
-  shareId: string
-): Promise<ItineraryDetailDto> {
-  const itinerary =
-    await this
-      ._itineraryRepository
-      .findByShareId(
-        shareId
-      );
+        shareId: string
+    ): Promise<ItineraryDetailDto> {
+        const itinerary =
+            await this
+                ._itineraryRepository
+                .findByShareId(
+                    shareId
+                );
 
-  if (!itinerary) {
-    throw new AppError(
-      HttpStatus.NOT_FOUND,
-      'Shared itinerary not found'
-    );
-  }
+        if (!itinerary) {
+            throw new AppError(
+                HttpStatus.NOT_FOUND,
+                'Shared itinerary not found'
+            );
+        }
 
-  return ItineraryMapper.toDetailDto(
-    itinerary
-  );
-}
+        return ItineraryMapper.toDetailDto(
+            itinerary
+        );
+    }
 }
