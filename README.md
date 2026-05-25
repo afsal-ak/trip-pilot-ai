@@ -11,7 +11,7 @@ Built as part of the **Orbitra Technologies – Junior Full Stack Developer (MER
 ## 🚀 Live Demo
 
 ### Frontend
-🔗 [Live App](https://trip-pilot-2u0zzxnkp-afsals-projects-230a91d2.vercel.app)
+🔗 [Live App](https://trip-pilot-ai.vercel.app)
 
 ### Backend API
 🔗 [Backend API](https://trip-pilot-ai.onrender.com)
